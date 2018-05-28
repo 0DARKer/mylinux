@@ -11,7 +11,8 @@
 "<>h
 "<>rcw
 "<>cc<>cu
-
+"<>ilt
+"<>tn <>tp ctrl-t
 
 " vundle 环境设置
 filetype off
@@ -27,7 +28,10 @@ Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'majutsushi/tagbar'
+"Plugin 'vim-scripts/indexer.tar.gz'
+"Plugin 'vim-scripts/DfrankUtil'
+"Plugin 'vim-scripts/vimprj'
 
 " 插件列表结束
 call vundle#end()
@@ -170,10 +174,130 @@ nnoremap <Leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' wi
 """效率的工具:模板补全
 ""设置模板路径为:~/.vim/bundle/ultisnips/mysnippets/cpp.snippets.
 let g:UltiSnipsSnippetDirectories=["mysnippets"]
-
 " UltiSnips 的 tab 键与 YCM 冲突，重新设定
-let g:UltiSnipsExpandTrigger="<leader><tab>"
-let g:UltiSnipsJumpForwardTrigger="<leader><tab>"
-let g:UltiSnipsJumpBackwardTrigger="<leader><s-tab>"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 
+" 设置 tagbar 子窗口的位置出现在主编辑区的左边 
+let tagbar_left=1 
+" 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
+nnoremap <Leader>ilt :TagbarToggle<CR> 
+" 设置标签子窗口的宽度 
+let tagbar_width=32 
+" tagbar 子窗口中不显示冗余帮助信息 
+let g:tagbar_compact=1
+" 设置 ctags 对哪些代码标识符生成标签
+let g:tagbar_type_cpp = {
+    \ 'kinds' : [
+         \ 'c:classes:0:1',
+         \ 'd:macros:0:1',
+         \ 'e:enumerators:0:0', 
+         \ 'f:functions:0:1',
+         \ 'g:enumeration:0:1',
+         \ 'l:local:0:1',
+         \ 'm:members:0:1',
+         \ 'n:namespaces:0:1',
+         \ 'p:functions_prototypes:0:1',
+         \ 's:structs:0:1',
+         \ 't:typedefs:0:1',
+         \ 'u:unions:0:1',
+         \ 'v:global:0:1',
+         \ 'x:external:0:1'
+     \ ],
+     \ 'sro'        : '::',
+     \ 'kind2scope' : {
+         \ 'g' : 'enum',
+         \ 'n' : 'namespace',
+         \ 'c' : 'class',
+         \ 's' : 'struct',
+         \ 'u' : 'union'
+     \ },
+     \ 'scope2kind' : {
+         \ 'enum'      : 'g',
+         \ 'namespace' : 'n',
+         \ 'class'     : 'c',
+         \ 'struct'    : 's',
+         \ 'union'     : 'u'
+     \ }
+\ }
+
+
+
+
+"""""""""""
+"  < 判断操作系统是否是 Windows 还是 Linux >
+"------------------------------------------------------------------------------
+    let g:iswindows = 0
+
+"------------------------------------------------------------------------------
+"  < 判断是终端还是 Gvim >
+"------------------------------------------------------------------------------
+    let g:isGUI = 0
+
+"------------------------------------------------------------------------------
+"  < 编译、连接、运行配置 >
+"------------------------------------------------------------------------------
+" Ctrl + F9 一键保存并编译
+map <F5> :call Compile()<CR>
+map <F6> :call _debug()<CR>
+
+
+let s:LastShellReturn_C = 0
+let s:LastShellReturn_L = 0
+let s:ShowWarning = 1
+let s:Obj_Extension = '.o'
+let s:Exe_Extension = '.exe'
+let s:Sou_Error = 0
+let s:linux_CFlags = 'clang\ %\ -o\ %<.exe\ -g'
+let s:linux_CPPFlags = 'g++\ %\ -o\ %<.exe\ -g'
+let s:linux_gdb='gdb\ %<.exe'
+func! Compile()
+    exe ":ccl"
+    exe ":update"
+    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
+        let s:Sou_Error = 0
+        let s:LastShellReturn_C = 0
+        let Sou = expand("%:p")
+        let Obj = expand("%:p:r").s:Obj_Extension
+        let Obj_Name = expand("%:p:t:r").s:Obj_Extension
+        let v:statusmsg = ''
+        if !filereadable(Obj) || (filereadable(Obj) && (getftime(Obj) < getftime(Sou)))
+            redraw!
+            if expand("%:e") == "c"
+                exe ":setlocal makeprg=".s:linux_CFlags
+                echohl WarningMsg | echo " compiling..."
+                silent make
+            elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
+                exe ":setlocal makeprg=".s:linux_CPPFlags
+                echohl WarningMsg | echo " compiling..."
+                silent make
+            endif
+            redraw!
+            if v:shell_error != 0
+                let s:LastShellReturn_C = v:shell_error
+            endif
+            if empty(v:statusmsg)
+                echohl WarningMsg | echo " compilation successful"
+            else
+                exe ":bo cope"
+            endif
+        else
+            echohl WarningMsg | echo ""Obj_Name"is up to date"
+        endif
+    else
+        let s:Sou_Error = 1
+        echohl WarningMsg | echo " please choose the correct source file"
+    endif
+    exe ":setlocal makeprg=make"
+endfunc
+func! _debug()
+    exec ":ccl"
+    exec ":update"
+    redraw!
+    exe ":setlocal makeprg=".s:linux_gdb
+    echohl WarningMsg | echo "debuging"
+    silent make
+    redraw!
+endfunc

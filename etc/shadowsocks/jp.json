@@ -1,0 +1,11 @@
+{
+	"server":"jp0.sstizi.org",
+	"server_port":50118,
+	"local_address":"127.0.0.1",
+	"local_port":1080,
+	"password":"sstizi",
+	"timeout":300,
+	"method":"aes-256-cfb",
+	"fast_open":false,
+	"workers":1
+}

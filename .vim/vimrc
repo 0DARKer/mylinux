@@ -8,134 +8,135 @@
 "m
 "<F11>
 "<>i
-"<>h
-"<>rcw
-"<>cc<>cu
-"<>ilt
-"<>tn <>tp ctrl-t
+    "<F3>
+    "<>rcw
+    "<>cc<>cu<>ca
+    "<F4> 查看函数变量
+    "Ctrl-o
 
-" vundle 环境设置
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-" vundle 管理的插件列表必须位于 vundle#begin() 和 vundle#end() 之间
-call vundle#begin()
-"插件列表开始
+    " vundle 环境设置
+    filetype off
+    set rtp+=~/.vim/bundle/Vundle.vim
+    " vundle 管理的插件列表必须位于 vundle#begin() 和 vundle#end() 之间
+    call vundle#begin()
+    "插件列表开始
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'derekwyatt/vim-fswitch'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'SirVer/ultisnips'
-Plugin 'majutsushi/tagbar'
-"Plugin 'vim-scripts/indexer.tar.gz'
-"Plugin 'vim-scripts/DfrankUtil'
-"Plugin 'vim-scripts/vimprj'
+    Plugin 'VundleVim/Vundle.vim'
+    Plugin 'altercation/vim-colors-solarized'
+    Plugin 'octol/vim-cpp-enhanced-highlight'
+    Plugin 'nathanaelkane/vim-indent-guides'
+    Plugin 'derekwyatt/vim-fswitch'
+    Plugin 'scrooloose/nerdcommenter'
+    Plugin 'SirVer/ultisnips'
+    Plugin 'majutsushi/tagbar'
+    ""Bundle 'Rykka/riv.vim'
+    "Plugin 'vim-scripts/indexer.tar.gz'
+    "Plugin 'vim-scripts/DfrankUtil'
+    "Plugin 'vim-scripts/vimprj'
 
-" 插件列表结束
-call vundle#end()
-filetype plugin indent on
-
-
-
-"自动文件类型检测
-filetype on
-filetype plugin on
-"快捷键
-let mapleader=";"
-nmap la 0
-nmap le $
-nmap <leader>q :q<CR>
-nmap <leader>Q :q!<CR>
-nmap <leader>w :w<CR>
-nmap <leader>W :wq<CR>
-nnoremap nw	<C-W><C-W>
-nmap <leader>m :%<CR>
-"立即生效
-autocmd BufWritePost $MYVIMRC source $MYVIMRC
-
-"搜索
-set incsearch
-set ignorecase
-set nocompatible
-set wildmenu
+    " 插件列表结束
+    call vundle#end()
+    filetype plugin indent on
 
 
 
-"配色
-set background=dark
-colorscheme solarized
+    "自动文件类型检测
+    filetype on
+    filetype plugin on
+    "快捷键
+    let mapleader=";"
+    nmap la 0
+    nmap le $
+    nmap <leader>q :q<CR>
+    nmap <leader>Q :q!<CR>
+    nmap <leader>w :w<CR>
+    nmap <leader>W :wq<CR>
+    nnoremap nw	<C-W><C-W>
+    nmap <leader>m :%<CR>
+    "立即生效
+    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+
+    "搜索
+    set incsearch
+    set ignorecase
+    set nocompatible
+    set wildmenu
 
 
 
-"专注
-set gcr=a:block-blinkon0
-set guioptions-=l
-set guioptions-=L
-set guioptions-=r
-set guioptions-=R
-set guioptions-=m
-set guioptions-=T
+    "配色
+    set background=dark
+    colorscheme solarized
 
-" 将外部命令 wmctrl 控制窗口最大化的命令行参数封装成一个 vim 的函数
-fun! ToggleFullscreen()
-	call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
-endf
-" 全屏开/关快捷键
-map <silent> <F11> :call ToggleFullscreen()<CR>
-" 启动 vim 时自动全屏
-"autocmd VimEnter * call ToggleFullscreen()
 
-" 总是显示状态栏
-"set laststatus=2
-" 显示光标当前位置
-"set ruler
-" 开启行号显示
-"set number
-" 高亮显示当前行/列
-"set cursorline
-"set cursorcolumn
-" 高亮显示搜索结果
-set hlsearch
 
-"禁止折行
-set nowrap
+    "专注
+    set gcr=a:block-blinkon0
+    set guioptions-=l
+    set guioptions-=L
+    set guioptions-=r
+    set guioptions-=R
+    set guioptions-=m
+    set guioptions-=T
 
-" 开启语法高亮功能
-syntax enable
-" 允许用指定语法高亮配色方案替换默认方案
-syntax on
+    " 将外部命令 wmctrl 控制窗口最大化的命令行参数封装成一个 vim 的函数
+    fun! ToggleFullscreen()
+        call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
+    endf
+    " 全屏开/关快捷键
+    map <silent> <F11> :call ToggleFullscreen()<CR>
+    " 启动 vim 时自动全屏
+    "autocmd VimEnter * call ToggleFullscreen()
 
-" 自适应不同语言的智能缩进
-filetype indent on
-" 将制表符扩展为空格
-set expandtab
-" 设置编辑时制表符占用空格数
-set tabstop=4
-" 设置格式化时制表符占用空格数
-set shiftwidth=4
-" 让 vim 把连续数量的空格视为一个制表符
-set softtabstop=4
+    " 总是显示状态栏
+    "set laststatus=2
+    " 显示光标当前位置
+    "set ruler
+    " 开启行号显示
+    "set number
+    " 高亮显示当前行/列
+    "set cursorline
+    "set cursorcolumn
+    " 高亮显示搜索结果
+    set hlsearch
 
-"对齐线
-" 随 vim 自启动
-let g:indent_guides_enable_on_vim_startup=1
-" 从第二层开始可视化显示缩进
-let g:indent_guides_start_level=2
-" 色块宽度
-let g:indent_guides_guide_size=1
-" 快捷键 i 开/关缩进可视化
-:nmap <silent> <Leader>i <Plug>IndentGuidesToggle
+    "禁止折行
+    set nowrap
 
-" 基于缩进或语法进行代码折叠
-"set foldmethod=indent
-set foldmethod=syntax
-" 启动 vim 时关闭折叠代码
-set nofoldenable
+    " 开启语法高亮功能
+    syntax enable
+    " 允许用指定语法高亮配色方案替换默认方案
+    syntax on
 
-" *.cpp 和 *.h 间切换
-nmap <silent> <Leader>h :FSHere<cr>
+    " 自适应不同语言的智能缩进
+    filetype indent on
+    " 将制表符扩展为空格
+    set expandtab
+    " 设置编辑时制表符占用空格数
+    set tabstop=4
+    " 设置格式化时制表符占用空格数
+    set shiftwidth=4
+    " 让 vim 把连续数量的空格视为一个制表符
+    set softtabstop=4
+
+    "对齐线
+    " 随 vim 自启动
+    let g:indent_guides_enable_on_vim_startup=1
+    " 从第二层开始可视化显示缩进
+    let g:indent_guides_start_level=2
+    " 色块宽度
+    let g:indent_guides_guide_size=1
+    " 快捷键 i 开/关缩进可视化
+    :nmap <silent> <Leader>i <Plug>IndentGuidesToggle
+
+    " 基于缩进或语法进行代码折叠
+    "set foldmethod=indent
+    set foldmethod=syntax
+    " 启动 vim 时关闭折叠代码
+    set nofoldenable
+
+    " *.cpp 和 *.h 间切换
+    nmap <silent> <F3> :FSHere<cr>
 
 
 " 替换函数。参数说明：
@@ -175,15 +176,15 @@ nnoremap <Leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' wi
 ""设置模板路径为:~/.vim/bundle/ultisnips/mysnippets/cpp.snippets.
 let g:UltiSnipsSnippetDirectories=["mysnippets"]
 " UltiSnips 的 tab 键与 YCM 冲突，重新设定
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsJumpForwardTrigger="<leader><tab>"
+let g:UltiSnipsJumpBackwardTrigger="<leader><s-tab>"
 
 
 " 设置 tagbar 子窗口的位置出现在主编辑区的左边 
 let tagbar_left=1 
 " 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
-nnoremap <Leader>ilt :TagbarToggle<CR> 
+nnoremap <F4> :TagbarToggle<CR> 
 " 设置标签子窗口的宽度 
 let tagbar_width=32 
 " tagbar 子窗口中不显示冗余帮助信息 
@@ -251,7 +252,8 @@ let s:Obj_Extension = '.o'
 let s:Exe_Extension = '.exe'
 let s:Sou_Error = 0
 let s:linux_CFlags = 'clang\ %\ -o\ %<.exe\ -g'
-let s:linux_CPPFlags = 'g++\ %\ -o\ %<.exe\ -g'
+let s:linux_CPPFlags = 'clang++\ %\ -o\ %<.exe\ -g'
+let s:linux_rstflag = 'make html'
 let s:linux_gdb='gdb\ %<.exe'
 func! Compile()
     exe ":ccl"
@@ -271,6 +273,10 @@ func! Compile()
                 silent make
             elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
                 exe ":setlocal makeprg=".s:linux_CPPFlags
+                echohl WarningMsg | echo " compiling..."
+                silent make
+            elseif expand("%:e") == "rst"
+                exe ":setlocal makeprg=".s:linux_rstflag
                 echohl WarningMsg | echo " compiling..."
                 silent make
             endif
@@ -301,3 +307,25 @@ func! _debug()
     silent make
     redraw!
 endfunc
+
+
+"代码自动补全
+inoremap ' ''<ESC>i
+inoremap " ""<ESC>i
+inoremap ( ()<ESC>i
+inoremap [ []<ESC>i
+inoremap { {<CR>}<ESC>O
+
+func! SkipPair()
+    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
+        return "\<ESC>la"
+    else
+        return "\t"
+    endif
+endfunc
+" 将tab键绑定为跳出括号  
+inoremap <TAB> <c-r>=SkipPair()<CR>
+"自动缩进
+set autoindent 
+set cindent 
+set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s

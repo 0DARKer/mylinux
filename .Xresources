@@ -29,6 +29,10 @@ URxvt.inputMethod:fcitx
 URxvt.font: xft:Bitstream Vera Sans Mono:size=10:atialias=true:hinting=true,xft:????????:size=10
 URxvt.boldfont: xft:Bitstream Vera Sans Mono:bold:size=10:atialias=true:hinting=true, xft:????????:style=BOld:size=10
 
+Xft.dpi: 125
+URxvt.font: xft:Source Code Pro:antialias=True:pixelsize=15,xft:WenQuanYi Zen Hei:pixelsize=15
+URxvt.boldfont: xft:Source Code Pro:antialias=True:pixelsize=15,xft:WenQuanYi Zen Hei:pixelsize=15
+
 ! Colorscheme: Solarized light
 URxvt.depth:32
 URxvt.background:            #fdf7e3

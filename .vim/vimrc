@@ -1,148 +1,59 @@
-"la
-"le
-"<>q
-"<>Q
-"<>w
-"<>W
-"nw
-"m
-"<F11>
-"<>i
-    "<F3>
-    "<>rcw
-    "<>cc<>cu<>ca
-    "<F4> 查看函数变量
-    "Ctrl-o
+"cpp编译调试
+map <F5> :call Compile()<CR>
+map <F6> :call _debug()<CR>
+"替换整词
+nnoremap <F4> :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+"ctrl+a全复制
+nmap <silent> <C-a> ggvG$"+y
+"添加作者信息
+map <F3> ms:call AddAuthor()<cr>'s
 
-    " vundle 环境设置
-    filetype off
-    set rtp+=~/.vim/bundle/Vundle.vim
-    " vundle 管理的插件列表必须位于 vundle#begin() 和 vundle#end() 之间
-    call vundle#begin()
-    "插件列表开始
-
-    Plugin 'VundleVim/Vundle.vim'
-    Plugin 'altercation/vim-colors-solarized'
-    Plugin 'octol/vim-cpp-enhanced-highlight'
-    Plugin 'nathanaelkane/vim-indent-guides'
-    Plugin 'derekwyatt/vim-fswitch'
-    Plugin 'scrooloose/nerdcommenter'
-    Plugin 'SirVer/ultisnips'
-    Plugin 'majutsushi/tagbar'
-    ""Bundle 'Rykka/riv.vim'
-    "Plugin 'vim-scripts/indexer.tar.gz'
-    "Plugin 'vim-scripts/DfrankUtil'
-    "Plugin 'vim-scripts/vimprj'
-
-    " 插件列表结束
-    call vundle#end()
-    filetype plugin indent on
-
-
-
-    "自动文件类型检测
-    filetype on
-    filetype plugin on
-    "快捷键
-    let mapleader=";"
-    nmap la 0
-    nmap le $
-    nmap <leader>q :q<CR>
-    nmap <leader>Q :q!<CR>
-    nmap <leader>w :w<CR>
-    nmap <leader>W :wq<CR>
-    nnoremap nw	<C-W><C-W>
-    nmap <leader>m :%<CR>
-    "立即生效
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
-
-    "搜索
-    set incsearch
-    set ignorecase
-    set nocompatible
-    set wildmenu
+filetype on
+set incsearch
+set ignorecase
+set wildmenu
+set hlsearch
+set nowrap
+syntax enable
+filetype indent on 
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set foldmethod=syntax
+set nofoldenable
+set autoindent
+set cindent
+set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let s:compile = 'clang++\ %\ -o\ /tmp/vim_compile\ -g'
+let s:debug = 'gdb /tmp/vim_compile'
+func! Compile()
+    exe ":ccl"
+    exe ":update"
+    if expand("%:e")=="cpp"
+        let v:statusmsg=''
+        redraw!
+        exe ":setlocal makeprg=".s:compile
+        echohl WarningMsg | echo " compiling..."
+        silent make
+        redraw!
+        if empty(v:statusmsg)
+            echohl WarningMsg | echo " compilation successful"
+        else
+            exe ":bo cope"
+        endif
+    else
+        echohl WarningMsg | echo " choose right cpp file"
+    endif
+endfunc
+func! _debug()
+    exe ":call Compile()"
+    exe ":!gdb /tmp/vim_compile" 
+endfunc
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
-
-    "配色
-    set background=dark
-    colorscheme solarized
-
-
-
-    "专注
-    set gcr=a:block-blinkon0
-    set guioptions-=l
-    set guioptions-=L
-    set guioptions-=r
-    set guioptions-=R
-    set guioptions-=m
-    set guioptions-=T
-
-    " 将外部命令 wmctrl 控制窗口最大化的命令行参数封装成一个 vim 的函数
-    fun! ToggleFullscreen()
-        call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")
-    endf
-    " 全屏开/关快捷键
-    map <silent> <F11> :call ToggleFullscreen()<CR>
-    " 启动 vim 时自动全屏
-    "autocmd VimEnter * call ToggleFullscreen()
-
-    " 总是显示状态栏
-    "set laststatus=2
-    " 显示光标当前位置
-    "set ruler
-    " 开启行号显示
-    "set number
-    " 高亮显示当前行/列
-    "set cursorline
-    "set cursorcolumn
-    " 高亮显示搜索结果
-    set hlsearch
-
-    "禁止折行
-    set nowrap
-
-    " 开启语法高亮功能
-    syntax enable
-    " 允许用指定语法高亮配色方案替换默认方案
-    syntax on
-
-    " 自适应不同语言的智能缩进
-    filetype indent on
-    " 将制表符扩展为空格
-    set expandtab
-    " 设置编辑时制表符占用空格数
-    set tabstop=4
-    " 设置格式化时制表符占用空格数
-    set shiftwidth=4
-    " 让 vim 把连续数量的空格视为一个制表符
-    set softtabstop=4
-
-    "对齐线
-    " 随 vim 自启动
-    let g:indent_guides_enable_on_vim_startup=1
-    " 从第二层开始可视化显示缩进
-    let g:indent_guides_start_level=2
-    " 色块宽度
-    let g:indent_guides_guide_size=1
-    " 快捷键 i 开/关缩进可视化
-    :nmap <silent> <Leader>i <Plug>IndentGuidesToggle
-
-    " 基于缩进或语法进行代码折叠
-    "set foldmethod=indent
-    set foldmethod=syntax
-    " 启动 vim 时关闭折叠代码
-    set nofoldenable
-
-    " *.cpp 和 *.h 间切换
-    nmap <silent> <F3> :FSHere<cr>
-
-
-" 替换函数。参数说明：
-" confirm：是否替换前逐一确认
-" wholeword：是否整词匹配
-" replace：被替换字符串
 function! Replace(confirm, wholeword, replace)
     wa
     let flag = ''
@@ -160,172 +71,41 @@ function! Replace(confirm, wholeword, replace)
     let replace = escape(a:replace, '/\&~')
     execute 'argdo %s/' . search . '/' . replace . '/' . flag . '| update'
 endfunction
-" 不询问、整词和非整词
-nnoremap <Leader>R :call Replace(0, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-" 不询问、只整词
-nnoremap <Leader>rw :call Replace(0, 1, input('Replace '.expand('<cword>').' with: '))<CR>
-" 询问、整词和非整词
-nnoremap <Leader>rc :call Replace(1, 0, input('Replace '.expand('<cword>').' with: '))<CR>
-" 询问、只整词
-nnoremap <Leader>rcw :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
 
-nnoremap <Leader>rwc :call Replace(1, 1, input('Replace '.expand('<cword>').' with: '))<CR>
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"在linux上，输入：vim /etc/vimrc，登陆root用户，打开vimrc配置文件，为了区别各个功能的代码，在文件的末尾重起一行输入如下代码：
+function AddAuthor()
+        let n=1
+        while n < 5
+                let line = getline(n)
+                if line =~'^\s*\*\s*\S*Last\s*modified\s*:\s*\S*.*$'
+                        call UpdateTitle()
+                        return
+                endif
+                let n = n + 1
+        endwhile
+        call AddTitle()
+endfunction
+function UpdateTitle()
+        normal m'
+        execute '/* Last modified\s*:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
+        normal "
+        normal mk
+        execute '/* Filename\s*:/s@:.*$@\=": ".expand("%:t")@'
+        execute "noh"
+        normal 'k
+        echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
+endfunction
+function AddTitle()
+        call append(0,"/**********************************************************")
+        call append(1," * Author        : 0DARKer")
+        call append(2," * Email         : 18851733010@163.com")
+        call append(3," * github        : https://github.com/0DARKer")
+        call append(4," * Last modified : ".strftime("%Y-%m-%d %H:%M"))
+        call append(5," * Filename      : ".expand("%:t"))
+        call append(6," * Description   : ")
+        call append(7," * *******************************************************/")
+        echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
+endfunction
+"添加上面的代码后，关闭vim后再打开，再按下F4就自动的添加作者信息。
 
-
-"""效率的工具:模板补全
-""设置模板路径为:~/.vim/bundle/ultisnips/mysnippets/cpp.snippets.
-let g:UltiSnipsSnippetDirectories=["mysnippets"]
-" UltiSnips 的 tab 键与 YCM 冲突，重新设定
-let g:UltiSnipsExpandTrigger="<leader><tab>"
-let g:UltiSnipsJumpForwardTrigger="<leader><tab>"
-let g:UltiSnipsJumpBackwardTrigger="<leader><s-tab>"
-
-
-" 设置 tagbar 子窗口的位置出现在主编辑区的左边 
-let tagbar_left=1 
-" 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
-nnoremap <F4> :TagbarToggle<CR> 
-" 设置标签子窗口的宽度 
-let tagbar_width=32 
-" tagbar 子窗口中不显示冗余帮助信息 
-let g:tagbar_compact=1
-" 设置 ctags 对哪些代码标识符生成标签
-let g:tagbar_type_cpp = {
-    \ 'kinds' : [
-         \ 'c:classes:0:1',
-         \ 'd:macros:0:1',
-         \ 'e:enumerators:0:0', 
-         \ 'f:functions:0:1',
-         \ 'g:enumeration:0:1',
-         \ 'l:local:0:1',
-         \ 'm:members:0:1',
-         \ 'n:namespaces:0:1',
-         \ 'p:functions_prototypes:0:1',
-         \ 's:structs:0:1',
-         \ 't:typedefs:0:1',
-         \ 'u:unions:0:1',
-         \ 'v:global:0:1',
-         \ 'x:external:0:1'
-     \ ],
-     \ 'sro'        : '::',
-     \ 'kind2scope' : {
-         \ 'g' : 'enum',
-         \ 'n' : 'namespace',
-         \ 'c' : 'class',
-         \ 's' : 'struct',
-         \ 'u' : 'union'
-     \ },
-     \ 'scope2kind' : {
-         \ 'enum'      : 'g',
-         \ 'namespace' : 'n',
-         \ 'class'     : 'c',
-         \ 'struct'    : 's',
-         \ 'union'     : 'u'
-     \ }
-\ }
-
-
-
-
-"""""""""""
-"  < 判断操作系统是否是 Windows 还是 Linux >
-"------------------------------------------------------------------------------
-    let g:iswindows = 0
-
-"------------------------------------------------------------------------------
-"  < 判断是终端还是 Gvim >
-"------------------------------------------------------------------------------
-    let g:isGUI = 0
-
-"------------------------------------------------------------------------------
-"  < 编译、连接、运行配置 >
-"------------------------------------------------------------------------------
-" Ctrl + F9 一键保存并编译
-map <F5> :call Compile()<CR>
-map <F6> :call _debug()<CR>
-
-
-let s:LastShellReturn_C = 0
-let s:LastShellReturn_L = 0
-let s:ShowWarning = 1
-let s:Obj_Extension = '.o'
-let s:Exe_Extension = '.exe'
-let s:Sou_Error = 0
-let s:linux_CFlags = 'clang\ %\ -o\ %<.exe\ -g'
-let s:linux_CPPFlags = 'clang++\ %\ -o\ %<.exe\ -g'
-let s:linux_rstflag = 'make html'
-let s:linux_gdb='gdb\ %<.exe'
-func! Compile()
-    exe ":ccl"
-    exe ":update"
-    if expand("%:e") == "c" || expand("%:e") == "cpp" || expand("%:e") == "cxx"
-        let s:Sou_Error = 0
-        let s:LastShellReturn_C = 0
-        let Sou = expand("%:p")
-        let Obj = expand("%:p:r").s:Obj_Extension
-        let Obj_Name = expand("%:p:t:r").s:Obj_Extension
-        let v:statusmsg = ''
-        if !filereadable(Obj) || (filereadable(Obj) && (getftime(Obj) < getftime(Sou)))
-            redraw!
-            if expand("%:e") == "c"
-                exe ":setlocal makeprg=".s:linux_CFlags
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            elseif expand("%:e") == "cpp" || expand("%:e") == "cxx"
-                exe ":setlocal makeprg=".s:linux_CPPFlags
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            elseif expand("%:e") == "rst"
-                exe ":setlocal makeprg=".s:linux_rstflag
-                echohl WarningMsg | echo " compiling..."
-                silent make
-            endif
-            redraw!
-            if v:shell_error != 0
-                let s:LastShellReturn_C = v:shell_error
-            endif
-            if empty(v:statusmsg)
-                echohl WarningMsg | echo " compilation successful"
-            else
-                exe ":bo cope"
-            endif
-        else
-            echohl WarningMsg | echo ""Obj_Name"is up to date"
-        endif
-    else
-        let s:Sou_Error = 1
-        echohl WarningMsg | echo " please choose the correct source file"
-    endif
-    exe ":setlocal makeprg=make"
-endfunc
-func! _debug()
-    exec ":ccl"
-    exec ":update"
-    redraw!
-    exe ":setlocal makeprg=".s:linux_gdb
-    echohl WarningMsg | echo "debuging"
-    silent make
-    redraw!
-endfunc
-
-
-"代码自动补全
-inoremap ' ''<ESC>i
-inoremap " ""<ESC>i
-inoremap ( ()<ESC>i
-inoremap [ []<ESC>i
-inoremap { {<CR>}<ESC>O
-
-func! SkipPair()
-    if getline('.')[col('.') - 1] == ')' || getline('.')[col('.') - 1] == ']' || getline('.')[col('.') - 1] == '"' || getline('.')[col('.') - 1] == "'" || getline('.')[col('.') - 1] == '}'
-        return "\<ESC>la"
-    else
-        return "\t"
-    endif
-endfunc
-" 将tab键绑定为跳出括号  
-inoremap <TAB> <c-r>=SkipPair()<CR>
-"自动缩进
-set autoindent 
-set cindent 
-set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s

@@ -1,2 +1,2 @@
 # mylinux
-manjaro+i3+urxvt+vim+ g++ +gdb
+manjaro+i3+urxvt+vim+ clang++ +gdb

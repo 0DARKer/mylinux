@@ -1,0 +1,26 @@
+我的快捷键设置：
+１．编辑器
+ctrl+ enter  :下一行编辑
+ctrl+ shift + enter :上一行并编辑
+ctrl + z : 撤销更改
+ctrl +shift + z:撤销撤销更改；
+ctrl + /: 注释反注释代码；
+<F5> :编译代码
+<F6> :调试代码
+ctrl + {/ }:　　折叠,反折叠
+ctrl [/ ]:行首缩进
+home /end:行首，行尾
+ctrl + upforward/downforward : 移动整行
+ctrl + home/end : 文首、文尾
+ctrl + backspace/delete: 删除左/右单词
+shift + backspace :删除行
+
+２．系统：
+<F12> 字典
+win+ enter :终端
+win+q:退出窗口
+...
+
+３．页面
+alt +1/2/3..: 切换页面
+...
